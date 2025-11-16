@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#3498db">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="manifest" href="manifest.json">
+    <title>伤寒论麻将 - 中医学习游戏网站</title>
+    <script>
+        // 浏览器兼容性检测和重定向
+        function checkBrowserCompatibility() {
+            const userAgent = navigator.userAgent;
+            const isIE = /MSIE|Trident/.test(userAgent);
+            const isOldBrowser = !window.CSS || !CSS.supports || !CSS.supports('display', 'grid');
+            
+            // 如果是IE或非常旧的浏览器，重定向到兼容性页面
+            if (isIE || isOldBrowser) {
+                console.warn('检测到不支持的浏览器，重定向到兼容性页面');
+                window.location.href = 'browser-compatibility.html';
+                return;
+            }
+            
+            // 检测移动设备并优化
+            const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
+            if (isMobile) {
+                console.log('移动设备检测，优化用户体验');
+                document.documentElement.classList.add('mobile-device');
+            }
+            
+            console.log('浏览器兼容性检查通过');
+        }
+        
+        // 在页面加载前执行检测
+        (function() {
+            checkBrowserCompatibility();
+        })();
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --light-bg: #f8f9fa;
+            --dark-bg: #2c3e50;
+            --text-light: #ffffff;
+            --text-dark: #2c3e50;
+            --shadow-light: 0 4px 15px rgba(0,0,0,0.1);
+            --shadow-medium: 0 8px 25px rgba(0,0,0,0.15);
+            --shadow-heavy: 0 15px 35px rgba(0,0,0,0.2);
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: var(--dark-bg);
+            color: var(--text-light);
+            padding: 1rem 0;
+            box-shadow: var(--shadow-medium);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--text-light);
+            text-decoration: none;
+        }
+        
+        /* 品牌Logo样式 - 固定在顶部且尺寸优化 */
+        .logo-container {
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            text-align: center;
+            margin: 0;
+            padding: 5px;
+            background: transparent;
+            border-radius: 0;
+            box-shadow: none;
+            backdrop-filter: none;
+        }
+        
+        .brand-logo {
+            width: 100%;
+            max-width: 100px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+            border-radius: 8px;
+            box-shadow: none;
+            transition: transform 0.2s ease;
+        }
+        
+        .brand-logo:hover {
+            transform: scale(1.1);
+            box-shadow: var(--shadow-medium);
+        }
+        
+        /* 为主要内容添加顶部边距，避免被logo遮挡 */
+        .main-content, .hero, .container {
+            margin-top: 40px;
+        }
+
+        .logo span {
+            color: var(--accent-color);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+        }
+
+        nav a:hover {
+            background: rgba(255,255,255,0.1);
+            color: var(--accent-color);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 120px 0 80px;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,249,250,0.95) 100%);
+            backdrop-filter: blur(10px);
+        }
+        
+        /* 重置hero区域中的logo样式，保持统一 */
+        /* 重置hero区域中的logo样式，保持统一 */
+        .hero .logo-container {
+            margin-bottom: 30px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            color: var(--dark-bg);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: #666;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: var(--shadow-light);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--secondary-color), #2980b9);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--dark-bg);
+            border: 2px solid var(--secondary-color);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 80px 0;
+            background: white;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--dark-bg);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: var(--light-bg);
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: var(--shadow-light);
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Game Preview */
+        .game-preview {
+            padding: 80px 0;
+            background: linear-gradient(135deg, var(--light-bg) 0%, #e9ecef 100%);
+        }
+
+        .preview-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .preview-image {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow-heavy);
+            text-align: center;
+        }
+
+        .preview-image img {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+
+        .placeholder-image {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark-bg);
+            color: var(--text-light);
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            margin: 0 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .preview-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container nav-container">
+            <a href="index.html" class="logo"><img src="logo.png" alt="伤寒论麻将"> 🀄 伤寒论<span>麻将</span></a>
+            <nav>
+                <ul>
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="game.html">开始游戏</a></li>
+                    <li><a href="about.html">关于我们</a></li>
+                    <li><a href="help.html">游戏帮助</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="logo-container">
+                <img src="./linglan-fengqu.png" alt="灵兰风曲" style="width:100%;max-width:200px;height:auto;display:block;margin:0 auto;" />
+            </div>
+            <h1>🎮 伤寒论麻将</h1>
+            <p>在游戏中学习中医经典《伤寒论》，通过麻将形式掌握135味中药和经典方剂</p>
+            <div class="cta-buttons">
+                <a href="game.html" class="btn btn-primary">🚀 立即开始游戏</a>
+                <a href="#features" class="btn btn-secondary">📚 了解游戏特色</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title">✨ 游戏特色</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📚</div>
+                    <h3>完整中药数据库</h3>
+                    <p>包含135味常用中药的完整信息，涵盖性味归经、功效主治等</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎮</div>
+                    <h3>三种游戏模式</h3>
+                    <p>游戏模式、学习模式、挑战模式，满足不同学习需求</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🧠</div>
+                    <h3>智能记忆系统</h3>
+                    <p>基于间隔重复的记忆算法，科学提升学习效率</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🏆</div>
+                    <h3>成就系统</h3>
+                    <p>丰富成就系统，激励持续学习</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>响应式设计</h3>
+                    <p>完美适配电脑、平板、手机等设备</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>智能提示</h3>
+                    <p>智能提示系统，帮助解决困难关卡</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Game Preview -->
+    <section class="game-preview">
+        <div class="container">
+            <h2 class="section-title">🎯 游戏预览</h2>
+            <div class="preview-container">
+                <div class="preview-image">
+                    <div class="placeholder-image">
+                        游戏界面预览
+                    </div>
+                </div>
+                <div>
+                    <h3 style="font-size: 2rem; margin-bottom: 1rem;">体验中医学习乐趣</h3>
+                    <p style="font-size: 1.1rem; line-height: 1.8; margin-bottom: 2rem;">
+                        伤寒论麻将将传统中医学习与现代游戏设计完美结合，通过麻将的配对机制，
+                        让您在轻松愉快的游戏中掌握伤寒论的精髓。每张牌代表一味中药，
+                        每个方剂就是一次完整的配对挑战。
+                    </p>
+                    <div class="cta-buttons">
+                        <a href="game.html" class="btn btn-primary">🎮 开始游戏</a>
+                        <a href="help.html" class="btn btn-secondary">📖 游戏指南</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <h3>🀄 伤寒论麻将</h3>
+                    <p>中医学习与游戏结合的创新平台</p>
+                </div>
+                <div>
+                    <h4>快速链接</h4>
+                    <p><a href="game.html">开始游戏</a></p>
+                    <p><a href="about.html">关于我们</a></p>
+                    <p><a href="help.html">游戏帮助</a></p>
+                </div>
+                <div>
+                    <h4>联系信息</h4>
+                    <p>邮箱: 476767376@qq.com</p>
+                    <p>电话:13958697088</p>
+                </div>
+            </div>
+            <div class="footer-links">
+                <p>&copy; 2024 灵兰风曲伤寒论麻将. 保留所有权利.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // 导航栏滚动效果
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(44, 62, 80, 0.95)';
+                header.style.backdropFilter = 'blur(10px)';
+            } else {
+                header.style.background = 'var(--dark-bg)';
+                header.style.backdropFilter = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

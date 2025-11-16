@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#3498db">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="manifest" href="manifest.json">
+    <title>游戏帮助 - 伤寒论麻将</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --success-color: #27ae60;
+            --light-bg: #f8f9fa;
+            --dark-bg: #2c3e50;
+            --text-light: #ffffff;
+            --text-dark: #2c3e50;
+            --shadow-light: 0 4px 15px rgba(0,0,0,0.1);
+            --shadow-medium: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: var(--dark-bg);
+            color: var(--text-light);
+            padding: 1rem 0;
+            box-shadow: var(--shadow-medium);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--text-light);
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--accent-color);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+        }
+
+        nav a:hover {
+            background: rgba(255,255,255,0.1);
+            color: var(--accent-color);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 120px 0 80px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,249,250,0.95) 100%);
+            backdrop-filter: blur(10px);
+            min-height: calc(100vh - 200px);
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        /* 品牌Logo样式 - 固定在顶部且尺寸优化 */
+        .logo-container {
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            text-align: center;
+            margin: 0;
+            padding: 5px;
+            background: transparent;
+            border-radius: 0;
+            box-shadow: none;
+            backdrop-filter: none;
+        }
+        
+        .brand-logo {
+            width: 100%;
+            max-width: 100px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+            border-radius: 8px;
+            box-shadow: none;
+            transition: transform 0.2s ease;
+        }
+        
+        .brand-logo:hover {
+            transform: scale(1.1);
+            box-shadow: var(--shadow-medium);
+        }
+        
+        /* 为主要内容添加顶部边距，避免被logo遮挡 */
+        .main-content, .container {
+            margin-top: 40px;
+        }
+
+        .page-title {
+            font-size: 3rem;
+            color: var(--dark-bg);
+            margin-bottom: 1rem;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .help-sections {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .help-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow-light);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            color: var(--dark-bg);
+            margin-bottom: 1.5rem;
+            border-left: 5px solid var(--secondary-color);
+            padding-left: 1rem;
+        }
+
+        .instructions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .instruction-item {
+            background: var(--light-bg);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .shortcut-key {
+            background: var(--dark-bg);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        .faq-item {
+            background: var(--light-bg);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .faq-item:hover {
+            background: #e9ecef;
+        }
+
+        .faq-question {
+            font-weight: bold;
+            color: var(--dark-bg);
+            margin-bottom: 1rem;
+        }
+
+        .faq-answer {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .tip-box {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            border: 2px solid #ffeaa7;
+            color: #856404;
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin: 1rem 0;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark-bg);
+            color: var(--text-light);
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .page-title {
+                font-size: 2.5rem;
+            }
+
+            .help-section {
+                padding: 1.5rem 1rem;
+            }
+
+            .instructions-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container nav-container">
+            <a href="index.html" class="logo">🀄 伤寒论<span>麻将</span></a>
+            <nav>
+                <ul>
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="game.html">开始游戏</a></li>
+                    <li><a href="about.html">关于我们</a></li>
+                    <li><a href="help.html" style="background: rgba(255,255,255,0.2);">游戏帮助</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container">
+            <div class="page-header">
+                <div class="logo-container">
+                <img src="./linglan-fengqu.png" alt="灵兰风曲" style="width:100%;max-width:200px;height:auto;display:block;margin:0 auto;" />
+            </div>
+                <h1 class="page-title">游戏帮助</h1>
+                <p class="page-subtitle">快速掌握伤寒论麻将的操作方法和游戏规则</p>
+            </div>
+
+            <div class="help-sections">
+                <!-- 游戏基础 -->
+                <div class="help-section">
+                    <h2 class="section-title">🎮 游戏基础</h2>
+                    <p style="font-size: 1.1rem; line-height: 1.8; margin-bottom: 1.5rem;">
+                        伤寒论麻将是一款基于中医经典《伤寒论》的学习游戏。通过麻将的配对机制，
+                        学习掌握135味中药和经典方剂的配伍关系。
+                    </p>
+                    
+                    <div class="instructions-grid">
+                        <div class="instruction-item">
+                            <h3 style="color: var(--secondary-color); margin-bottom: 0.5rem;">游戏目标</h3>
+                            <p>收集完整的目标方剂的所有药材，通过正确的配对完成方剂学习</p>
+                        </div>
+                        <div class="instruction-item">
+                            <h3 style="color: var(--secondary-color); margin-bottom: 0.5rem;">游戏模式</h3>
+                            <p>三种模式：游戏模式（闯关）、学习模式（自由探索）、挑战模式（限时）</p>
+                        </div>
+                        <div class="instruction-item">
+                            <h3 style="color: var(--secondary-color); margin-bottom: 0.5rem;">记忆系统</h3>
+                            <p>智能记忆算法，根据你的学习进度调整复习频率</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 操作指南 -->
+                <div class="help-section">
+                    <h2 class="section-title">⌨️ 操作指南</h2>
+                    
+                    <div class="instructions-grid">
+                        <div class="instruction-item">
+                            <h3 style="color: var(--secondary-color); margin-bottom: 1rem;">基本操作</h3>
+                            <p><span class="shortcut-key">点击</span>选中药材牌</p>
+                            <p><span class="shortcut-key">双击</span>查看药材详情</p>
+                            <p><span class="shortcut-key">拖拽</span>移动药材牌</p>
+                        </div>
+                        
+                        <div class="instruction-item">
+                            <h3 style="color: var(--secondary-color); margin-bottom: 1rem;">快捷键</h3>
+                            <p><span class="shortcut-key">S</span>移入手牌</p>
+                            <p><span class="shortcut-key">C</span>检查方剂</p>
+                            <p><span class="shortcut-key">H</span>智能提示</p>
+                            <p><span class="shortcut-key">M</span>记忆辅助</p>
+                        </div>
+                        
+                        <div class="instruction-item">
+                            <h3 style="color: var(--secondary-color); margin-bottom: 1rem;">界面功能</h3>
+                            <p><span class="shortcut-key">🏆</span>成就系统</p>
+                            <p><span class="shortcut-key">📊</span>统计面板</p>
+                            <p><span class="shortcut-key">🔊</span>音效控制</p>
+                            <p><span class="shortcut-key">📱</span>响应式设计</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 游戏策略 -->
+                <div class="help-section">
+                    <h2 class="section-title">🎯 游戏策略</h2>
+                    
+                    <div class="tip-box">
+                        <h3 style="color: #856404; margin-bottom: 1rem;">💡 新手小贴士</h3>
+                        <ul style="line-height: 1.8;">
+                            <li>先使用学习模式熟悉中药特性</li>
+                            <li>合理利用智能提示功能</li>
+                            <li>注意药材的禁忌和配伍关系</li>
+                            <li>善用记忆系统强化学习效果</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+                        <div style="background: var(--light-bg); padding: 1.5rem; border-radius: 15px;">
+                            <h4 style="color: var(--secondary-color); margin-bottom: 1rem;">药材管理</h4>
+                            <p>及时清理不需要的药材，保持手牌整洁</p>
+                        </div>
+                        <div style="background: var(--light-bg); padding: 1.5rem; border-radius: 15px;">
+                            <h4 style="color: var(--secondary-color); margin-bottom: 1rem;">方剂学习</h4>
+                            <p>关注伤寒论原文，理解方剂的组成原理</p>
+                        </div>
+                        <div style="background: var(--light-bg); padding: 1.5rem; border-radius: 15px;">
+                            <h4 style="color: var(--secondary-color); margin-bottom: 1rem;">成就收集</h4>
+                            <p>完成特定任务解锁成就，获得额外奖励</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 常见问题 -->
+                <div class="help-section">
+                    <h2 class="section-title">❓ 常见问题</h2>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">Q: 游戏中的数据是否准确？</div>
+                        <div class="faq-answer">
+                            A: 所有中药数据均来自权威中医典籍，经过专业医师审核，确保准确性。
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">Q: 如何保存游戏进度？</div>
+                        <div class="faq-answer">
+                            A: 游戏进度会自动保存到浏览器本地存储中，下次访问时自动加载。
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">Q: 支持哪些设备？</div>
+                        <div class="faq-answer">
+                            A: 支持电脑、平板、手机等所有现代设备，采用响应式设计适配不同屏幕尺寸。
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">Q: 是否需要联网？</div>
+                        <div class="faq-answer">
+                            A: 游戏完全本地运行，无需联网即可使用所有功能。
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 联系支持 -->
+                <div class="help-section">
+                    <h2 class="section-title">📞 技术支持</h2>
+                    
+                    <div style="background: linear-gradient(135deg, var(--secondary-color), #2980b9); color: white; padding: 2rem; border-radius: 15px; text-align: center;">
+                        <h3 style="margin-bottom: 1rem;">遇到问题？</h3>
+                        <p style="margin-bottom: 1.5rem;">我们的技术支持团队随时为您服务</p>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                            <div>
+                                <h4>📧 邮箱</h4>
+                                <p>476767376@qq.com</p>
+                            </div>
+                            <div>
+                                <h4>📞 电话</h4>
+                                <p>13958697088</p>
+                            </div>
+                            <div>
+                                <h4>🕒 时间</h4>
+                                <p>周一至周五 9:00-18:00</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 伤寒论麻将. 保留所有权利.</p>
+        </div>
+    </footer>
+
+    <script>
+        // 导航栏滚动效果
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(44, 62, 80, 0.95)';
+                header.style.backdropFilter = 'blur(10px)';
+            } else {
+                header.style.background = 'var(--dark-bg)';
+                header.style.backdropFilter = 'none';
+            }
+        });
+
+        // FAQ展开效果
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.addEventListener('click', function() {
+                this.classList.toggle('active');
+            });
+        });
+    </script>
+</body>
+</html>
